@@ -22,7 +22,7 @@ func githubHandler(w http.ResponseWriter, r *http.Request) {
    fmt.Println("got the github hook!")
    secret := []byte("imasecret")
    hook, err := githubhook.Parse(secret, r)
-   fmt.Println("heres the hook payload", hook.Payload)
+   fmt.Println("heres the hook Id", hook.Id)
    if err != nil {
       log.Fatal("fatal parsing hook", err)
    }
