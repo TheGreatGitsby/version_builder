@@ -3,7 +3,6 @@ package main
 import (
    "fmt"
    "net/http"
-   //"net/http/httputil"
    "log"
    "gopkg.in/rjz/githubhook.v0"
 )
@@ -25,7 +24,18 @@ func githubHandler(w http.ResponseWriter, r *http.Request) {
    fmt.Println("heres the hook Id", hook.Id)
    if err != nil {
       log.Fatal("fatal parsing hook", err)
+      return
    }
+   //pull latest in parent repository
+   //run glue script in background
+   //  redirect logs to some buffer so we can display
+   //  the log through http 
+   //  copy build artifacts to a directory within this repo.
+}
+
+func buildsHandler(w http.ResponseWriter, r *http.Request) {
+   http.ServeFile(w, r, "./builds.html")
+   fmt.Println("served builds page")
 }
 
 func main() {
@@ -33,6 +43,7 @@ func main() {
    http.HandleFunc("/bootstrap", BootstrapPage) // set router
    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
    http.HandleFunc("/gitwebhook", githubHandler) // set router
+   http.HandleFunc("/builds", buildsHandler) // set router
 
    err := http.ListenAndServe(":80", nil) // set listen port
    if err != nil {
