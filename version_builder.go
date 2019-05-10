@@ -2,6 +2,7 @@ package main
 
 import (
    "fmt"
+   "os"
    "net/http"
    "log"
    "gopkg.in/rjz/githubhook.v0"
@@ -39,6 +40,10 @@ func buildsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+   if os.Args[1] == "" {
+      log.Fatal("Require arg - path to build script!")
+      return
+   }
    http.HandleFunc("/", homePage) // set router
    http.HandleFunc("/bootstrap", BootstrapPage) // set router
    http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
